@@ -7,9 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -30,9 +31,25 @@ public class CustomerController {
         } else {
             customers = customerService.findAll(pageable);
         }
-        ModelAndView modelAndView = new ModelAndView("product/list");
+        ModelAndView modelAndView = new ModelAndView("customer/list");
         modelAndView.addObject("customers", customers);
         return modelAndView;
+    }
+
+    @GetMapping("/create")
+    public String showCreate(Model model) {
+        Customer customer = new Customer();
+        model.addAttribute("customer", customer);
+        return "customer/create";
+    }
+
+    @PostMapping("/create")
+    public String createCustomer(@Validated @ModelAttribute Customer customer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "customer/create";
+        }
+        customerService.save(customer);
+        return "redirect:/customer";
     }
 
 
