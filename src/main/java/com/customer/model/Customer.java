@@ -3,6 +3,7 @@ package com.customer.model;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -19,6 +20,11 @@ public class Customer {
     @Column(nullable = false)
     @Min(value = 18, message = "tuoi tren 18")
     private int age;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "so dien thoai khong duoc de trong")
+    @Pattern(regexp = "^0\\d{9,10}", message = "dinh dang so dien thoai sai")
+    private String phone;
 
     public Customer() {
     }
@@ -45,5 +51,13 @@ public class Customer {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
